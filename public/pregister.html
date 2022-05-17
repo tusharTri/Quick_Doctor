@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Patient Register</title>
+      <link rel="stylesheet" type="text/css" href="CSS/patient.css" />
+   </head>
+   <body>
+      <script type="module">
+         // Import the functions you need from the SDKs you need
+         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-app.js";
+         import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-analytics.js";
+         import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-database.js";
+         import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-auth.js";
+         
+         // TODO: Add SDKs for Firebase products that you want to use
+         // https://firebase.google.com/docs/web/setup#available-libraries
+         
+         // Your web app's Firebase configuration
+         // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+         const firebaseConfig = {
+           apiKey: "AIzaSyCT35fxVKr7JU-1W0xT7zOiUCn1ZOrdsCQ",
+           authDomain: "new-test-60430.firebaseapp.com",
+           databaseURL: "https://new-test-60430-default-rtdb.firebaseio.com",
+           projectId: "new-test-60430",
+           storageBucket: "new-test-60430.appspot.com",
+           messagingSenderId: "1023209711240",
+           appId: "1:1023209711240:web:bf1c336ddf1d69fc09213d",
+           measurementId: "G-N1TWB5HMGJ"
+         };
+         
+         // Initialize Firebase
+         const app = initializeApp(firebaseConfig);
+         const analytics = getAnalytics(app);
+         const db = getDatabase();
+         const auth = getAuth(app);
+         
+         register.addEventListener('click', fun);
+         console.log(1)
+         var userId=1
+         var name;
+         var dob;
+         var phone;
+         var email;
+         var pwd;
+         var repwd;
+         
+         function fun() {
+           name = document.getElementById("name").value;
+           dob = document.getElementById("dob").value;
+           phone = document.getElementById("phone").value;
+           email = document.getElementById("email").value;
+           pwd = document.getElementById("password").value;
+           repwd = document.getElementById("repassword").value;
+           if (name == "") {
+             alert("please write your name!!");
+             return false;
+           }
+           if (dob == "") {
+             alert("Please give your DateofBirth!!");
+             return false;
+           }
+           if (phone == "") {
+             alert("please give your phone number!!");
+             return false;
+           } else if (phone.length != 10) {
+             alert("Please give your 10 digit phone number!!");
+             return false;
+           }
+           if (email == "") {
+             alert("Please give your email id!!");
+             return false;
+           }
+           if (pwd == "") {
+             alert("Please give your  password!!");
+             return false;
+           }
+           if (repwd == "") {
+             alert("Please give your password again!!");
+             return false;
+           } else if (pwd != repwd) {
+             alert("Your password is not matched!!");
+             return false;
+           }
+           createUserWithEmailAndPassword(auth, email, pwd)
+           .then((userCredential) => {
+             const user = userCredential.user;
+             write(user.uid);
+             alert("Account Creation Successful");
+           })
+           .catch((error) => {
+             const errorCode = error.code;
+             const errorMessage = error.message;
+             alert(errorMessage)
+           });
+         }
+         
+         function write(x) {
+           set(ref(db, 'patients/' + x), {
+                 Name: name,
+                 DOB: dob,
+                 Phone: phone,
+                 EMail: email
+                 })
+                 .then(() => {
+                 // Data saved successfully!
+                 alert("Login Now!!!");
+                 login();
+                 })
+                 .catch((error) => {
+                 // The write failed...
+                 alert(error);
+             });
+         }
+         
+         function login() {
+           window.location.href = "patient.html"
+         }
+      </script>
+      <div class="head">Doctor Appointment</div>
+      <form>
+         <div class="container">
+            <p>Patient Register</p>
+            <p>Name:<input type="text" class="inputbox" id="name" /></p>
+            <p>DOB:<input type="date" class="inputbox" id="dob" /></p>
+            <p>Phone No.:<input type="number" class="inputbox" id="phone" /></p>
+            <p>Email ID:<input type="email" class="inputbox" id="email" /></p>
+            <p>Password:<input type="password" class="inputbox" id="password" /></p>
+            <p>
+               Re-Password:<input type="password" class="inputbox" id="repassword" />
+            </p>
+            <input type="button" value="Register" id="register" name="register" />
+            <input type="button" value="Back" onclick="back()" />
+         </div>
+      </form>
+   </body>
+</html>

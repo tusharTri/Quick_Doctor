@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Doctor Register</title>
+      <link rel="stylesheet" type="text/css" href="CSS/doctor.css" />
+      <script type="module">
+         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-app.js";
+           import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-analytics.js";
+           import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-database.js";
+           import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-auth.js";
+         
+           const firebaseConfig = {
+             apiKey: "AIzaSyCT35fxVKr7JU-1W0xT7zOiUCn1ZOrdsCQ",
+             authDomain: "new-test-60430.firebaseapp.com",
+             databaseURL: "https://new-test-60430-default-rtdb.firebaseio.com",
+             projectId: "new-test-60430",
+             storageBucket: "new-test-60430.appspot.com",
+             messagingSenderId: "1023209711240",
+             appId: "1:1023209711240:web:bf1c336ddf1d69fc09213d",
+             measurementId: "G-N1TWB5HMGJ"
+           };
+         
+         // Initialize Firebase
+         const app = initializeApp(firebaseConfig);
+           const analytics = getAnalytics(app);
+           const db = getDatabase();
+           const auth = getAuth(app);
+         
+         var name;
+         var dob;
+         var gender;
+         var phone;
+         var email;
+         var state;
+         var city;
+         var clinic;
+         var pwd;
+         var repwd;
+         var userId;
+         
+         register.addEventListener('click', fun);
+         
+         function back() {
+         window.history.go(-1);
+         }
+         
+         function fun() {
+         name = document.getElementById("name").value;
+         dob = document.getElementById("dob").value;
+         gender = document.getElementById("gender").value;
+         phone = document.getElementById("phone").value;
+         email = document.getElementById("email").value;
+         state = document.getElementById("countrySelect").value;
+         city = document.getElementById("citySelect").value;
+         clinic = document.getElementById("clinic").value;
+         pwd = document.getElementById("password").value;
+         repwd = document.getElementById("repassword").value;
+         // if (name == "") {
+         //   alert("please write your name!!");
+         //   return false;
+         // }
+         // if (dob == "") {
+         //   alert("Please give your DateofBirth!!");
+         //   return false;
+         // }
+         // if (gender == "") {
+         //   alert("please enter your gender!!");
+         //   return false;
+         // }
+         // if (phone == "") {
+         //   alert("please give your phone number!!");
+         //   return false;
+         // } else if (phone.length != 10) {
+         //   alert("Please give your 10 digit phone number!!");
+         //   return false;
+         // }
+         if (email == "") {
+           alert("Please give your email id!!");
+           return false;
+         }
+         // if (state == "") {
+         //   alert("please enter your state!!");
+         //   return false;
+         // }
+         // if (city == "") {
+         //   alert("please enter your city!!");
+         //   return false;
+         // }
+         // if (clinic == "") {
+         //   alert("please enter your Clinic name else write 'NO' !!");
+         //   return false;
+         // }
+         if (pwd == "") {
+           alert("Please give your  password!!");
+           return false;
+         }
+         if (repwd == "") {
+           alert("Please give your password again!!");
+           return false;
+         } else if (pwd != repwd) {
+           alert("Your password is not matched!!");
+           return false;
+         }
+         
+         createUserWithEmailAndPassword(auth, email, pwd)
+           .then((userCredential) => {
+             const user = userCredential.user;
+             write(user.uid);
+             alert("Account Creation Successful");
+           })
+           .catch((error) => {
+             const errorCode = error.code;
+             const errorMessage = error.message;
+             alert(errorMessage)
+           });
+         }
+         
+         function write(x) {
+             set(ref(db, 'doctors/' + x), {
+                   Name: name,
+                   DOB: dob,
+                   Phone: phone,
+                   EMail: email,
+                   Gender: gender,
+                   State: state,
+                   City: city,
+                   Clinic: clinic
+                   })
+                   .then(() => {
+                   // Data saved successfully!
+                   alert("Login Now!!!");
+                   login();
+                   })
+                   .catch((error) => {
+                   // The write failed...
+                   alert(error);
+               });
+           }
+         
+           function login() {
+             window.location.href = "doctor.html"
+           }
+         
+      </script>
+   </head>
+   <body>
+      <div class="head">Doctor Appointment</div>
+      <form>
+         <div class="container">
+            <p>Doctor Register</p>
+            <p>Name:<input type="text" class="inputbox" id="name" /></p>
+            <p>DOB:<input type="date" class="inputbox" id="dob" /></p>
+            <p>
+               Gender:
+               <select name="gender" id="gender" class="form-control">
+                  <option value="" disabled selected>Gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Others">Others</option>
+               </select>
+            </p>
+            <p>Phone No.:<input type="number" class="inputbox" id="phone" /></p>
+            <p>Email ID:<input type="email" class="inputbox" id="email" /></p>
+            <p>
+               State:
+               <select
+                  id="countrySelect"
+                  size="1"
+                  onchange="makeSubmenu(this.value)"
+                  >
+                  <option value="" disabled selected>Choose State</option>
+                  <option>Odisha</option>
+                  <option>Maharashtra</option>
+                  <option>Kerala</option>
+               </select>
+            </p>
+            <p>
+               City:
+               <select id="citySelect" size="1">
+                  <option value="" disabled selected>Choose City</option>
+                  <option>Delhi</option>
+               </select>
+            </p>
+            <p>
+               Clinic Name:<input type="text" class="inputbox" id="clinic" />
+            </p>
+            <p>Password:<input type="password" class="inputbox" id="password" /></p>
+            <p>
+               Re-Password:<input type="password" class="inputbox" id="repassword" />
+            </p>
+            <input type="button" value="Register" name="register" id="register"/>
+            <input type="button" value="Back" onclick="back()" />
+         </div>
+      </form>
+      <footer>
+         <p>Copyright © 2020 Doctor Inc. All rights reserved.</p>
+      </footer>
+   </body>
+</html>

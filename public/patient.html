@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Doctor</title>
+      <link rel="stylesheet" type="text/css" href="CSS/patient.css" />
+      <script typr="text/javascript" src="JS/patient.js"></script>
+      <script type="module">
+         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-app.js";
+         import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-analytics.js";
+         import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-auth.js";
+         
+         const firebaseConfig = {
+             apiKey: "AIzaSyCT35fxVKr7JU-1W0xT7zOiUCn1ZOrdsCQ",
+             authDomain: "new-test-60430.firebaseapp.com",
+             databaseURL: "https://new-test-60430-default-rtdb.firebaseio.com",
+             projectId: "new-test-60430",
+             storageBucket: "new-test-60430.appspot.com",
+             messagingSenderId: "1023209711240",
+             appId: "1:1023209711240:web:bf1c336ddf1d69fc09213d",
+             measurementId: "G-N1TWB5HMGJ"
+           };
+         
+         const app = initializeApp(firebaseConfig);
+         const analytics = getAnalytics(app);
+         
+         var errorMessage;
+         login.addEventListener('click',fun);
+         function fun() {
+         var email = document.getElementById("email").value;
+         var psd = document.getElementById("password").value;
+         
+         if (email == "") {
+           alert("Please Enter your Username");
+           // document.write("no name");
+           return false;
+         }
+         
+         
+         if (psd == "") {
+           alert("Please Enter your Password");
+           // document.write("no name");
+           return false;
+         } else {
+           const auth = getAuth();
+             signInWithEmailAndPassword(auth, email, psd)
+             .then((userCredential) => {
+               const user = userCredential.user;
+               alert("login successfull")
+               window.location.href="paccount.html"
+             })
+             .catch((error) => {
+               const errorCode = error.code;
+               const errorMessage = error.message;
+             });
+         }
+         }
+      </script>
+   </head>
+   <body>
+      <div class="head">Patient-Login</div>
+      <div class="container">
+         <p>Patient-Login</p>
+         <p>Email ID: <input type="text" id="email" /></p>
+         <p>Password: <input type="password" id="password" /></p>
+         <input type="button" value="Login" id="login" name="login" />
+         <input type="submit" value="Back" onclick="back()"/>
+         <p><a href="password.html">Forget Password? </a></p>
+         <p>New Patient? <a href="pregister.html">Register</a></p>
+      </div>
+   </body>
+</html>
+<script></script>
